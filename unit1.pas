@@ -8,7 +8,7 @@ uses
   Windows, Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Menus, fphttpclient, registry, shlobj, INIFiles, dateutils,
   BGRABitmap, BGRABitmapTypes, BGRAGradients, fpjson, BGRATextFX,
-  jsonparser, uniqueinstanceraw, LCLIntf, Spin, unit3, crt, strutils, Math;
+  jsonparser, uniqueinstanceraw, LCLIntf, Spin, unit3, crt, strutils, Math,opensslsockets;
 
 type
   TShowStatusEvent = procedure(Status: string) of object;
@@ -453,7 +453,7 @@ var
   my_array: array[0..20] of string;
   sat: string;
   ratio, ratiox, ratioy: double;
-  newwidth, newheight: integer;
+  newwidth, newheight,year,month,day: integer;
   renderer: TBGRATextEffectFontRenderer;
   locationname: string;
 begin
@@ -468,26 +468,26 @@ begin
   my_array[4] := 'conus/geocolor/:conus:goes-16';
   my_array[5] := 'conus/band_13/:conus:goes-16';
 
-  my_array[6] := 'full_disk/natural_color/:full_disk:goes-17';
-  my_array[7] := 'full_disk/geocolor/:full_disk:goes-17';
-  my_array[8] := 'full_disk/band_13/:full_disk:goes-17';
-  my_array[9] := 'conus/natural_color/:conus:goes-17';
-  my_array[10] := 'conus/geocolor/:conus:goes-17';
-  my_array[11] := 'conus/band_13/:conus:goes-17';
+ // my_array[6] := 'full_disk/natural_color/:full_disk:goes-17';
+  //my_array[7] := 'full_disk/geocolor/:full_disk:goes-17';
+  //my_array[8] := 'full_disk/band_13/:full_disk:goes-17';
+  //my_array[9] := 'conus/natural_color/:conus:goes-17';
+  //my_array[10] := 'conus/geocolor/:conus:goes-17';
+  //my_array[11] := 'conus/band_13/:conus:goes-17';
 
 
-  my_array[12] := 'full_disk/natural_color/:full_disk:himawari';
-  my_array[13] := 'full_disk/geocolor/:full_disk:himawari';
-  my_array[14] := 'full_disk/band_13/:full_disk:himawari';
+  my_array[6] := 'full_disk/natural_color/:full_disk:himawari';
+  my_array[7] := 'full_disk/geocolor/:full_disk:himawari';
+  my_array[8] := 'full_disk/band_13/:full_disk:himawari';
 
 
-  my_array[15] := 'northern_hemisphere/eumetsat_natural_color/:northern_hemisphere:jpss';
-  my_array[16] := 'northern_hemisphere/cira_geocolor/:northern_hemisphere:jpss';
-  my_array[17] := 'northern_hemisphere/band_m15/:northern_hemisphere:jpss';
+  my_array[9] := 'northern_hemisphere/eumetsat_natural_color/:northern_hemisphere:jpss';
+  my_array[10] := 'northern_hemisphere/cira_geocolor/:northern_hemisphere:jpss';
+  my_array[11] := 'northern_hemisphere/band_m15/:northern_hemisphere:jpss';
 
-  my_array[18] := 'southern_hemisphere/eumetsat_natural_color/:southern_hemisphere:jpss';
-  my_array[19] := 'southern_hemisphere/cira_geocolor/:southern_hemisphere:jpss';
-  my_array[20] := 'southern_hemisphere/band_m15/:southern_hemisphere:jpss';
+  my_array[12] := 'southern_hemisphere/eumetsat_natural_color/:southern_hemisphere:jpss';
+  my_array[13] := 'southern_hemisphere/cira_geocolor/:southern_hemisphere:jpss';
+  my_array[14] := 'southern_hemisphere/band_m15/:southern_hemisphere:jpss';
 
 
 
@@ -514,7 +514,7 @@ begin
 
           if ((sourceindex > -1) and (sourceindex < 30)) then
           begin
-            if ((sourceindex > -1) and (sourceindex < 21)) then
+            if ((sourceindex > -1) and (sourceindex < 15)) then
             begin
 
               productpath := ExtractDelimited(1, my_array[sourceindex], [#58]);
@@ -529,22 +529,31 @@ begin
 
 
               jsonstring :=
-                'http://rammb-slider.cira.colostate.edu/data/json/' +
+                'https://rammb-slider.cira.colostate.edu/data/json/' +
                 sat + '/' + productpath + 'available_dates.json';
               datestring := getlatestimagedate('dates_int', jsonstring);
               if (trim(datestring) = '') then
                 exit;
 
 
+
               jsonstring :=
-                'http://rammb-slider.cira.colostate.edu/data/json/' +
+                'https://rammb-slider.cira.colostate.edu/data/json/' +
                 sat + '/' + productpath + datestring + '_by_hour.json';
               jsondatestring := getlatestimagedate('timestamps_int', jsonstring);
               if (trim(jsondatestring) = '') then
                 exit;
 
+               // Extract year, month, and day components from the datestring
+  year := StrToInt(Copy(datestring, 1, 4));
+  month := StrToInt(Copy(datestring, 5, 2));
+  day := StrToInt(Copy(datestring, 7, 2));
 
-              Source := 'http://rammb-slider.cira.colostate.edu/data/imagery/' +
+  // Create a TDateTime value from the extracted components
+  datestring := FormatDateTime('yyyy/mm/dd', EncodeDate(year, month, day));
+
+
+              Source := 'https://rammb-slider.cira.colostate.edu/data/imagery/' +
                 datestring + '/' + sat + '---' + productpath +
                 jsondatestring + '/00/000_000.png';
 
@@ -553,7 +562,7 @@ begin
             begin
 
               case sourceindex of
-                25:
+                19:
                 begin
                   Source := htmlgetvalue('https://apod.nasa.gov/apod/astropix.html',
                     '<IMG SRC="');
@@ -566,21 +575,21 @@ begin
                 {14: Source := htmlgetvalue(
                     'https://earthobservatory.nasa.gov/IOTD/index.php', '<img src="');}
 
-                26: Source := htmlgetvalue(
+                20: Source := htmlgetvalue(
                     'https://earthobservatory.nasa.gov/feeds/image-of-the-day.rss',
                     'src="');
 
 
-                27: Source := htmlgetvalue(
+                21: Source := htmlgetvalue(
                     'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
                     '<enclosure url="');
 
-                28:
+                22:
                 begin
                   Source := ExtractDelimited(1, constructstarmapurl, [#124]);
                   locationname := ExtractDelimited(2, constructstarmapurl, [#124]);
                 end;
-                29: Source := htmlgetvalue(
+                23: Source := htmlgetvalue(
                     'https://www.heartlight.org/cgi-shl/todaysverse.cgi',
                     '<h4>Illustration</h4><img src="');
                 else
@@ -613,7 +622,7 @@ begin
                   AStream.Free;
                 end;
 
-                if ((sourceindex > -1) and (sourceindex < 21) and
+                if ((sourceindex > -1) and (sourceindex < 15) and
                   (mapchecked)) then
                 begin
                   //start
@@ -622,19 +631,20 @@ begin
 
 
                   jsonstring :=
-                    'http://rammb-slider.cira.colostate.edu/data/json/' +
-                    sat + '/' + mappath + '/map/white/latest_times_all.json';
+                    'https://rammb-slider.cira.colostate.edu/data/json/' +
+                    sat + '/' + mappath + '/maps/borders/white/latest_times_all.json';
                   jsondatestringmap :=
                     getlatestimagedate('timestamps_int_map', jsonstring);
                   if (trim(jsondatestringmap) = '') then
                     exit;
 
+                  //https://rammb-slider.cira.colostate.edu/data/maps/goes-16/full_disk/borders/white/20171201010000/00/000_000.png
 
                   sourcemap :=
-                    'http://rammb-slider.cira.colostate.edu/data/map/' +
-                    sat + '/' + mappath + '/white/' + jsondatestringmap +
+                    'https://rammb-slider.cira.colostate.edu/data/maps/' +
+                    sat + '/' + mappath + '/borders/white/' + jsondatestringmap +
                     '/00/000_000.png';
-
+                     // https://rammb-slider.cira.colostate.edu/data/json/goes-16/full_disk/maps/borders/white/latest_times_all.json
                   logit(trim(FormatDateTime('h:nn:ss AM/PM', now) +
                     ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + Sourcemap);
                   smap := get(sourcemap);
@@ -710,10 +720,10 @@ begin
 
 
 
-                if (sourceindex < 21) then
+                if (sourceindex < 15) then
                   bmp.TextRect(rect(0, 0, 400, bmp.Height), ' UTC: ' + jsondatestring,
                     taLeftJustify, tltop, c);
-                if (sourceindex = 28) then
+                if (sourceindex = 22) then
                   bmp.TextRect(rect(0, 0, 400, bmp.Height), locationname,
                     taLeftJustify, tltop, c);
 
@@ -797,6 +807,10 @@ begin
 
         s := get(jsonurl);
 
+
+
+
+        //https://rammb-slider.cira.colostate.edu/data/json/goes-16/full_disk/maps/borders/white/latest_times_all.json
         if (ResponseStatusCode = 200) then
         begin
           // try
@@ -1020,7 +1034,7 @@ begin
           #13#10 + 'Lat: ' + fieldlat + #13#10 + 'Long: ' + fieldlong;
 
 
-        sourceurl := 'http://www.skymaponline.net/default.aspx';
+        sourceurl := 'https://www.skymaponline.net/default.aspx';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + sourceurl);
@@ -1068,12 +1082,12 @@ begin
             fieldlong := leftstr(valtemp, pos('"', valtemp) - 1);}
 
             rbase := min(screen.Height, screen.Width);
-            Result := 'http://www.skymaponline.net/Handler1.ashx?r=' +
+            Result := 'https://www.skymaponline.net/Handler1.ashx?r=' +
               IntToStr((rbase div 2) - 15) + '&x=' + IntToStr(
               (rbase div 2) - 15) + '&y=' + IntToStr((rbase div 2) - 15) +
-              '&lat=%20' + fieldlat + '&long=' + fieldlong + '&time=' +
+              '&lat=%20' + trim(fieldlat) + '&long=' + trim(fieldlong) + '&time=' +
               fieldtimefix + '&rotation=90&w=' + IntToStr(rbase) +
-              '&h=' + IntToStr(rbase) + '|' + locationnameval;
+             '&h=' + IntToStr(rbase) + '|' + locationnameval;
 
           end;
           {except
@@ -1132,7 +1146,7 @@ begin
       try
 
         sourceurl :=
-          'http://api.ipstack.com/check?access_key=keygoeshere';
+          'https://api.ipstack.com/check?access_key=b3e2dd64f0f20af6faff0750f035e30e';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + sourceurl);
