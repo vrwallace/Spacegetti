@@ -12,8 +12,8 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
 {$R *.res}
 
 begin
-  Application.Scaled := True;
-  Application.Title := 'Spacegetti';
+  Application.Scaled:=True;
+  Application.Title:='Spacegetti';
   RequireDerivedFormResource := True;
   Application.Initialize;
   //Application.ShowMainForm := False;

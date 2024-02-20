@@ -1146,7 +1146,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=putkeyhere';
+          'https://api.ipstack.com/check?access_key=keygoeshere';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + sourceurl);
@@ -1172,17 +1172,17 @@ begin
             longval := leftstr(valtemp, pos(',', valtemp) - 1);
 
 
-            startvalue := '"city":"';
+            startvalue := '"city": "';
             valtemp := rightstr(s, (length(s) - pos(startvalue, s)) -
               length(startvalue) + 1);
             cityval := leftstr(valtemp, pos('"', valtemp) - 1);
 
-            startvalue := '"region_code":"';
+            startvalue := '"region_code": "';
             valtemp := rightstr(s, (length(s) - pos(startvalue, s)) -
               length(startvalue) + 1);
             regionval := leftstr(valtemp, pos('"', valtemp) - 1);
 
-            startvalue := '"country_code":"';
+            startvalue := '"country_code": "';
             valtemp := rightstr(s, (length(s) - pos(startvalue, s)) -
               length(startvalue) + 1);
             countryval := leftstr(valtemp, pos('"', valtemp) - 1);

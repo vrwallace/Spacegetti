@@ -7,7 +7,8 @@
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\spacegetti.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
-
+!define autostartApplicationName "spacestart"
+!define desktopAppName "spacegetti.exe"
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 
@@ -68,6 +69,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\spacegetti.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "${autostartApplicationName}" "$INSTDIR\${desktopAppName}"
 SectionEnd
 
 
@@ -98,5 +100,6 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  DeleteRegValue HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "${autostartApplicationName}"
   SetAutoClose true
 SectionEnd
