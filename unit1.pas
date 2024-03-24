@@ -1149,7 +1149,7 @@ begin
           'https://api.ipstack.com/check?access_key=keygoeshere';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
-          FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + sourceurl);
+          FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');
 
         s := get(sourceurl);
 
