@@ -8,7 +8,8 @@ uses
   Windows, Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Menus, fphttpclient, registry, shlobj, INIFiles, dateutils,
   BGRABitmap, BGRABitmapTypes, BGRAGradients, fpjson, BGRATextFX,
-  jsonparser, uniqueinstanceraw, LCLIntf, Spin, unit3, crt, strutils, Math,opensslsockets;
+  jsonparser, uniqueinstanceraw, LCLIntf, Spin, unit3, crt, strutils,
+  Math, opensslsockets;
 
 type
   TShowStatusEvent = procedure(Status: string) of object;
@@ -110,7 +111,6 @@ implementation
 { TForm1 }
 
 procedure TForm1.Button1Click(Sender: TObject);
-
 begin
   TrimAppMemorySize;
   MyThread := TMyThread.Create(True);
@@ -121,7 +121,8 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  ShowMessage('Email: vonwallace@yahoo.com');
+  //ShowMessage('Email: vonwallace@yahoo.com');
+   openurl('https://vonwallace.com');
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
@@ -154,7 +155,6 @@ var
   cnv: TControlCanvas;
   w: integer;
   s: string;
-
 begin
   w := 0;
   cnv := TControlCanvas.Create;
@@ -191,7 +191,6 @@ end;
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 var
   Reply, BoxStyle: integer;
-
 begin
 
   BoxStyle := MB_ICONQUESTION + MB_YESNO;
@@ -231,7 +230,6 @@ end;
 procedure TForm1.MenuItem2Click(Sender: TObject);
 var
   Reply, BoxStyle: integer;
-
 begin
 
   BoxStyle := MB_ICONQUESTION + MB_YESNO;
@@ -273,7 +271,6 @@ end;
 
 
 procedure tform1.mainp;
-
 begin
 
   MyThread := TMyThread.Create(True);
@@ -290,7 +287,6 @@ var
 
   filepath: string;
   INI: TINIFile;
-
 begin
 
   try
@@ -329,7 +325,6 @@ var
 
   filepath: string;
   INI: TINIFile;
-
 begin
 
   if (InstanceRunning) then
@@ -388,7 +383,6 @@ function tform1.getsetpath(): string;
 var
   PersonalPath: array[0..MaxPathLen] of char; //Allocate memory
   filepath: string;
-
 begin
 
   try
@@ -453,7 +447,7 @@ var
   my_array: array[0..20] of string;
   sat: string;
   ratio, ratiox, ratioy: double;
-  newwidth, newheight,year,month,day: integer;
+  newwidth, newheight, year, month, day: integer;
   renderer: TBGRATextEffectFontRenderer;
   locationname: string;
 begin
@@ -468,7 +462,7 @@ begin
   my_array[4] := 'conus/geocolor/:conus:goes-16';
   my_array[5] := 'conus/band_13/:conus:goes-16';
 
- // my_array[6] := 'full_disk/natural_color/:full_disk:goes-17';
+  // my_array[6] := 'full_disk/natural_color/:full_disk:goes-17';
   //my_array[7] := 'full_disk/geocolor/:full_disk:goes-17';
   //my_array[8] := 'full_disk/band_13/:full_disk:goes-17';
   //my_array[9] := 'conus/natural_color/:conus:goes-17';
@@ -544,13 +538,13 @@ begin
               if (trim(jsondatestring) = '') then
                 exit;
 
-               // Extract year, month, and day components from the datestring
-  year := StrToInt(Copy(datestring, 1, 4));
-  month := StrToInt(Copy(datestring, 5, 2));
-  day := StrToInt(Copy(datestring, 7, 2));
+              // Extract year, month, and day components from the datestring
+              year := StrToInt(Copy(datestring, 1, 4));
+              month := StrToInt(Copy(datestring, 5, 2));
+              day := StrToInt(Copy(datestring, 7, 2));
 
-  // Create a TDateTime value from the extracted components
-  datestring := FormatDateTime('yyyy/mm/dd', EncodeDate(year, month, day));
+              // Create a TDateTime value from the extracted components
+              datestring := FormatDateTime('yyyy/mm/dd', EncodeDate(year, month, day));
 
 
               Source := 'https://rammb-slider.cira.colostate.edu/data/imagery/' +
@@ -642,9 +636,9 @@ begin
 
                   sourcemap :=
                     'https://rammb-slider.cira.colostate.edu/data/maps/' +
-                    sat + '/' + mappath + '/borders/white/' + jsondatestringmap +
-                    '/00/000_000.png';
-                     // https://rammb-slider.cira.colostate.edu/data/json/goes-16/full_disk/maps/borders/white/latest_times_all.json
+                    sat + '/' + mappath + '/borders/white/' +
+                    jsondatestringmap + '/00/000_000.png';
+                  // https://rammb-slider.cira.colostate.edu/data/json/goes-16/full_disk/maps/borders/white/latest_times_all.json
                   logit(trim(FormatDateTime('h:nn:ss AM/PM', now) +
                     ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + Sourcemap);
                   smap := get(sourcemap);
@@ -676,7 +670,7 @@ begin
 
                 end;
 
-                if (resizechecked) then
+                if ((resizechecked) and (sourceindex <> 22))then
                 begin
 
                   FillChar(dm, SizeOf(dm), #0);
@@ -697,6 +691,7 @@ begin
 
                   bmp.ResampleFilter := rfBestQuality;
                   // bmp.ResampleFilter := rfLanczos3;
+                  //chg
                   BGRAReplace(BMP, bmp.resample(newwidth, newheight) as
                     TBGRABitmap);
 
@@ -884,9 +879,17 @@ begin
 end;
 
 procedure TMyThread.setdesktop(sWallpaperBMPPath: string);
+{const
+  LockScreenImagePath = 'LockScreenImagePath';
+  LockScreenImageUrl = 'LockScreenImageUrl';
+  LockScreenImageStatus = 'LockScreenImageStatus';}
+  //  ImagePathToLockScreen = sWallpaperBMPPath; // Replace with your image path
 var
   reg: TRegistry;
+  //ImagePathToLockScreen: string;
 begin
+
+ // ImagePathToLockScreen := sWallpaperBMPPath;
   try
 
     reg := TRegistry.Create;
@@ -904,6 +907,32 @@ begin
     finally
       reg.Free;
     end;
+
+    {try
+      Reg := TRegistry.Create(KEY_WRITE);  // Allow writing to the registry
+      try
+        Reg.RootKey := HKEY_CURRENT_USER;
+
+        // Create or open the key
+        if Reg.OpenKey('\SOFTWARE\Microsoft\Windows\CurrentVersion\PersonalizationCSP',
+          True) then
+        begin
+          // Set the string values
+          Reg.WriteString(LockScreenImagePath, ImagePathToLockScreen);
+          Reg.WriteString(LockScreenImageUrl, ImagePathToLockScreen);
+
+          // Set the DWORD value
+          Reg.WriteInteger(LockScreenImageStatus, 1);
+        end;
+
+      finally
+        Reg.CloseKey;
+      end;
+    finally
+      Reg.Free;
+    end;}
+
+
   except
     on E: Exception do
       DumpExceptionCallStack(E);
@@ -916,7 +945,6 @@ function TMyThread.getsetpath(): string;
 var
   PersonalPath: array[0..MaxPathLen] of char; //Allocate memory
   filepath: string;
-
 begin
 
   try
@@ -1085,9 +1113,9 @@ begin
             Result := 'https://www.skymaponline.net/Handler1.ashx?r=' +
               IntToStr((rbase div 2) - 15) + '&x=' + IntToStr(
               (rbase div 2) - 15) + '&y=' + IntToStr((rbase div 2) - 15) +
-              '&lat=%20' + trim(fieldlat) + '&long=' + trim(fieldlong) + '&time=' +
-              fieldtimefix + '&rotation=90&w=' + IntToStr(rbase) +
-             '&h=' + IntToStr(rbase) + '|' + locationnameval;
+              '&lat=%20' + trim(fieldlat) + '&long=' + trim(fieldlong) +
+              '&time=' + fieldtimefix + '&rotation=90&w=' + IntToStr(rbase) +
+              '&h=' + IntToStr(rbase) + '|' + locationnameval;
 
           end;
           {except
@@ -1146,7 +1174,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=keygoeshere';
+          'https://api.ipstack.com/check?access_key=keyhere';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');
@@ -1226,16 +1254,17 @@ begin
   end;
 end;
 
- procedure tform1.TrimAppMemorySize;
- var
-   MainHandle : THandle;
- begin
-   try
-     MainHandle := OpenProcess(PROCESS_ALL_ACCESS, false, GetCurrentProcessID) ;
-     SetProcessWorkingSetSize(MainHandle, $FFFFFFFF, $FFFFFFFF) ;
-     CloseHandle(MainHandle) ;
-   except
-   end;
-   Application.ProcessMessages;
- end;
+procedure tform1.TrimAppMemorySize;
+var
+  MainHandle: THandle;
+begin
+  try
+    MainHandle := OpenProcess(PROCESS_ALL_ACCESS, False, GetCurrentProcessID);
+    SetProcessWorkingSetSize(MainHandle, $FFFFFFFF, $FFFFFFFF);
+    CloseHandle(MainHandle);
+  except
+  end;
+  Application.ProcessMessages;
+end;
+
 end.

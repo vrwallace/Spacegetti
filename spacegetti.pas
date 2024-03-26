@@ -2,18 +2,19 @@ program spacegetti;
 
 {$mode objfpc}{$H+}
 
-uses {$IFDEF UNIX} {$IFDEF UseCThreads}
+uses
+  {$IFDEF UNIX} {$IFDEF UseCThreads}
   cthreads, {$ENDIF} {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms,
   Unit1,
   Unit3 { you can add units after this };
 
-{$R *.res}
+  {$R *.res}
 
 begin
-  Application.Scaled:=True;
-  Application.Title:='Spacegetti';
+  Application.Scaled := True;
+  Application.Title := 'Spacegetti';
   RequireDerivedFormResource := True;
   Application.Initialize;
   //Application.ShowMainForm := False;

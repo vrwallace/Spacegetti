@@ -1,90 +1,89 @@
 object Form2: TForm2
   Left = 1894
-  Height = 595
+  Height = 397
   Top = 729
-  Width = 869
+  Width = 579
   BorderStyle = bsSingle
   Caption = 'Spacegetti Telescope Calculator'
-  ClientHeight = 595
-  ClientWidth = 869
-  DesignTimePPI = 144
+  ClientHeight = 397
+  ClientWidth = 579
   Position = poScreenCenter
-  LCLVersion = '3.0.0.3'
+  LCLVersion = '3.2.0.0'
   object Label1: TLabel
-    Left = 31
-    Height = 25
-    Top = 36
-    Width = 164
+    Left = 21
+    Height = 15
+    Top = 24
+    Width = 109
     Caption = 'Telescope aperture ='
     ParentColor = False
     ParentFont = False
   end
   object aperturebox: TEdit
-    Left = 302
-    Height = 33
-    Top = 36
-    Width = 120
+    Left = 201
+    Height = 23
+    Top = 24
+    Width = 80
     ParentFont = False
     TabOrder = 0
   end
   object Label7: TLabel
-    Left = 434
-    Height = 25
-    Top = 36
-    Width = 32
+    Left = 289
+    Height = 15
+    Top = 24
+    Width = 22
     Caption = 'mm'
     ParentColor = False
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 31
-    Height = 25
-    Top = 84
-    Width = 177
+    Left = 21
+    Height = 15
+    Top = 56
+    Width = 118
     Caption = 'Telescope focal ratio ='
     ParentColor = False
     ParentFont = False
   end
   object focalratiobox: TEdit
-    Left = 302
-    Height = 33
-    Top = 84
-    Width = 120
+    Left = 201
+    Height = 23
+    Top = 56
+    Width = 80
     ParentFont = False
     TabOrder = 1
   end
   object Label3: TLabel
-    Left = 31
-    Height = 25
-    Top = 132
-    Width = 183
+    Left = 21
+    Height = 15
+    Top = 88
+    Width = 123
     Caption = 'Eyepiece focal length ='
     ParentColor = False
     ParentFont = False
   end
   object eyepiecefocallengthbox: TEdit
-    Left = 302
-    Height = 33
-    Top = 132
-    Width = 120
+    Left = 201
+    Height = 23
+    Top = 88
+    Width = 80
     ParentFont = False
     TabOrder = 2
   end
   object Label4: TLabel
-    Left = 31
-    Height = 25
-    Top = 180
-    Width = 200
+    Left = 21
+    Height = 15
+    Top = 120
+    Width = 133
     Caption = 'Eyepiece apparent field ='
     ParentColor = False
     ParentFont = False
   end
   object apparentfielddrop: TComboBox
-    Left = 302
-    Height = 33
-    Top = 180
-    Width = 150
-    ItemHeight = 25
+    Left = 201
+    Height = 23
+    Top = 120
+    Width = 100
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       '30'
@@ -112,29 +111,29 @@ object Form2: TForm2
     Text = '30'
   end
   object Label9: TLabel
-    Left = 468
-    Height = 25
-    Top = 180
-    Width = 63
+    Left = 312
+    Height = 15
+    Top = 120
+    Width = 41
     Caption = 'degrees'
     ParentColor = False
     ParentFont = False
   end
   object Label5: TLabel
-    Left = 31
-    Height = 25
-    Top = 228
-    Width = 101
+    Left = 21
+    Height = 15
+    Top = 152
+    Width = 68
     Caption = 'Barlowlens ='
     ParentColor = False
     ParentFont = False
   end
   object barlowlensdrop: TComboBox
-    Left = 302
-    Height = 33
-    Top = 228
-    Width = 150
-    ItemHeight = 25
+    Left = 201
+    Height = 23
+    Top = 152
+    Width = 100
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       '1.0'
@@ -154,29 +153,29 @@ object Form2: TForm2
     Text = '1.0'
   end
   object Label10: TLabel
-    Left = 468
-    Height = 25
-    Top = 228
-    Width = 99
+    Left = 312
+    Height = 15
+    Top = 152
+    Width = 66
     Caption = '(1.0 is None)'
     ParentColor = False
     ParentFont = False
   end
   object Label6: TLabel
-    Left = 31
-    Height = 25
-    Top = 276
-    Width = 126
+    Left = 21
+    Height = 15
+    Top = 184
+    Width = 85
     Caption = 'Focal Reducer ='
     ParentColor = False
     ParentFont = False
   end
   object focalreducerdrop: TComboBox
-    Left = 302
-    Height = 33
-    Top = 276
-    Width = 150
-    ItemHeight = 25
+    Left = 201
+    Height = 23
+    Top = 184
+    Width = 100
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       '1.0'
@@ -194,39 +193,39 @@ object Form2: TForm2
     Text = '1.0'
   end
   object Label11: TLabel
-    Left = 468
-    Height = 25
-    Top = 276
-    Width = 99
+    Left = 312
+    Height = 15
+    Top = 184
+    Width = 66
     Caption = '(1.0 is None)'
     ParentColor = False
     ParentFont = False
   end
   object Button1: TButton
-    Left = 726
-    Height = 37
-    Top = 324
-    Width = 113
+    Left = 484
+    Height = 25
+    Top = 216
+    Width = 75
     Caption = 'Calculate'
     ParentFont = False
     TabOrder = 6
     OnClick = Button1Click
   end
   object GroupBox1: TGroupBox
-    Left = 24
-    Height = 218
-    Top = 360
-    Width = 815
+    Left = 16
+    Height = 145
+    Top = 240
+    Width = 543
     Caption = 'Results'
-    ClientHeight = 188
-    ClientWidth = 811
+    ClientHeight = 125
+    ClientWidth = 539
     ParentFont = False
     TabOrder = 7
     object Memo1: TMemo
-      Left = 12
-      Height = 179
-      Top = 2
-      Width = 780
+      Left = 8
+      Height = 119
+      Top = 1
+      Width = 520
       Lines.Strings = (
         ''
       )
@@ -238,10 +237,10 @@ object Form2: TForm2
     end
   end
   object Label8: TLabel
-    Left = 434
-    Height = 25
-    Top = 132
-    Width = 32
+    Left = 289
+    Height = 15
+    Top = 88
+    Width = 22
     Caption = 'mm'
     ParentColor = False
     ParentFont = False

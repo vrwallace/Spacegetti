@@ -69,7 +69,6 @@ end;
 
 
 
-
 function tform2.round_fifth(num: float): float;
 begin
   Result := floor(num / 5 + 0.5) * 5;
@@ -91,190 +90,185 @@ begin
 end;
 
 procedure tform2.scope_calc;
-
 var
   eyepiece_apparent_field, eyepiece_focal_length, focal_ratio,
   barlow_factor, focal_reducer, focal_length, magnification, true_field,
   aperture, exit_pupil, resolving_power, m, limiting_magnitude: float;
   inch_or_mm: integer;
   scope_info: string;
-
 begin
   try
-  if isnumericstring(aperturebox.Text) then
-    aperture := StrToFloat(aperturebox.Text)
-  else
-  begin
-    ShowMessage('Please enter a valid figure for the telescopes aperture.');
-    exit;
-  end;
+    if isnumericstring(aperturebox.Text) then
+      aperture := StrToFloat(aperturebox.Text)
+    else
+    begin
+      ShowMessage('Please enter a valid figure for the telescopes aperture.');
+      exit;
+    end;
 
 
-  if (isNaN(aperture)) then
-  begin
-    ShowMessage('Please enter a valid figure for the telescopes aperture.');
-    exit;
-  end;
+    if (isNaN(aperture)) then
+    begin
+      ShowMessage('Please enter a valid figure for the telescopes aperture.');
+      exit;
+    end;
 
-  aperturebox.Text := floattostr(aperture);
+    aperturebox.Text := floattostr(aperture);
 
-  inch_or_mm := 1;
+    inch_or_mm := 1;
 
-  aperture := aperture * inch_or_mm;
-
-
-
-
-  if isnumericstring(focalratiobox.Text) then
-    focal_ratio := StrToFloat(focalratiobox.Text)
-  else
-  begin
-    ShowMessage('Please enter a valid figure for the telescope''s focal ratio.');
-    exit;
-  end;
-
-
-  if (isNaN(focal_ratio)) then
-  begin
-    ShowMessage('Please enter a valid figure for the telescope''s focal ratio.');
-    exit;
-  end;
-
-  focalratiobox.Text := floattostr(focal_ratio);
-
-
-  if isnumericstring(eyepiecefocallengthbox.Text) then
-    eyepiece_focal_length := strtofloat(eyepiecefocallengthbox.Text)
-  else
-  begin
-    ShowMessage('Please enter a valid figure for the eyepiece''s focal length.');
-    exit;
-  end;
+    aperture := aperture * inch_or_mm;
 
 
 
 
-  if (isNaN(eyepiece_focal_length)) then
-  begin
-    ShowMessage('Please enter a valid figure for the eyepiece''s focal length.');
-    exit;
-  end;
-
-  eyepiecefocallengthbox.Text := floattostr(eyepiece_focal_length);
-
-  eyepiece_apparent_field := strtofloat(apparentfielddrop.Text);
-
-  //end
-
-  barlow_factor := strtofloat(barlowlensdrop.Text);
-  focal_reducer := strtofloat(focalreducerdrop.Text);
-  focal_length := aperture * focal_ratio * barlow_factor * focal_reducer;
-
-  focal_ratio := round_10(focal_length / aperture);
-  magnification := focal_length / eyepiece_focal_length;
-  true_field := round_10(eyepiece_apparent_field / magnification);
-  exit_pupil := round_10(aperture / magnification);
-  resolving_power := round_100(115.824 / aperture);
+    if isnumericstring(focalratiobox.Text) then
+      focal_ratio := StrToFloat(focalratiobox.Text)
+    else
+    begin
+      ShowMessage('Please enter a valid figure for the telescope''s focal ratio.');
+      exit;
+    end;
 
 
-  M := magnification;
-  if (magnification > (22 * aperture / 25.4)) then
-    M := 22 * aperture / 25.4;
-  if (magnification > 1200) then
-    M := 1200;
+    if (isNaN(focal_ratio)) then
+    begin
+      ShowMessage('Please enter a valid figure for the telescope''s focal ratio.');
+      exit;
+    end;
 
-  limiting_magnitude := round_10(6.5 + 2.5 * ln(M * aperture / 25.4) / ln(10));
-
-  if (magnification > aperture * 2) then
-    ShowMessage(
-      'This is a high magnification for such an aperture. Unless you''re primarily a double-star observer, try using an eyepiece with a focal length greater than ' + IntToStr(floor(focal_length / (2 * aperture) + 0.5)) + 'mm.');
+    focalratiobox.Text := floattostr(focal_ratio);
 
 
-  if (exit_pupil > 7) then
-    ShowMessage(
-      'To ensure that the eyepiece''s exit pupil is fully accommodated by your dark adapted eye, try selecting an eyepiece with a focal length less than ' + IntToStr(floor(7 * focal_ratio)) + 'mm.');
-
-
-  if ((barlow_factor <> 1) and (focal_reducer <> 1)) then
-    ShowMessage('Are you sure that you wish to use a focal reducer and a Barlow lens together?');
-
-
-  scope_info := 'Focal Length:  ' + floattostr(round_fifth(focal_length)) + 'mm   ';
-
-  if (focal_reducer <> 1.0) then
-    scope_info := scope_info + '(You are using a ' + floattostr(focal_reducer) +
-      'x focal reducer)';
-
-
-  if (barlow_factor <> 1.0) then
-    scope_info := scope_info + '(You are using a ' + floattostr(barlow_factor) +
-      'x Barlow lens)';
-
-  scope_info := scope_info + #13#10;
-
-
-  scope_info := scope_info + 'Magnification: ' + IntToStr(floor(magnification + 0.5)) +
-    'x' + #13#10;
-
-  scope_info := scope_info + 'True Field of View: ' + floattostr(true_field) +
-    ' (degree) ';
-
-  if ((true_field >= 3.5) and (true_field < 7)) then
-    scope_info := scope_info + '(Orion''s Belt could easily fit into the field of view)'
-      +
-      #13#10;
+    if isnumericstring(eyepiecefocallengthbox.Text) then
+      eyepiece_focal_length := strtofloat(eyepiecefocallengthbox.Text)
+    else
+    begin
+      ShowMessage('Please enter a valid figure for the eyepiece''s focal length.');
+      exit;
+    end;
 
 
 
-  if ((true_field >= 2.8) and (true_field < 3.5)) then
-    scope_info := scope_info +
-      '(Orion''s Belt would fit snuggly into the field of view)' + #13#10;
+
+    if (isNaN(eyepiece_focal_length)) then
+    begin
+      ShowMessage('Please enter a valid figure for the eyepiece''s focal length.');
+      exit;
+    end;
+
+    eyepiecefocallengthbox.Text := floattostr(eyepiece_focal_length);
+
+    eyepiece_apparent_field := strtofloat(apparentfielddrop.Text);
+
+    //end
+
+    barlow_factor := strtofloat(barlowlensdrop.Text);
+    focal_reducer := strtofloat(focalreducerdrop.Text);
+    focal_length := aperture * focal_ratio * barlow_factor * focal_reducer;
+
+    focal_ratio := round_10(focal_length / aperture);
+    magnification := focal_length / eyepiece_focal_length;
+    true_field := round_10(eyepiece_apparent_field / magnification);
+    exit_pupil := round_10(aperture / magnification);
+    resolving_power := round_100(115.824 / aperture);
 
 
-  if ((true_field >= 1.5) and (true_field < 2.8)) then
-    scope_info := scope_info + '(The Pleiades would easily fit into the field of view)'
-      + #13#10;
+    M := magnification;
+    if (magnification > (22 * aperture / 25.4)) then
+      M := 22 * aperture / 25.4;
+    if (magnification > 1200) then
+      M := 1200;
+
+    limiting_magnitude := round_10(6.5 + 2.5 * ln(M * aperture / 25.4) / ln(10));
+
+    if (magnification > aperture * 2) then
+      ShowMessage(
+        'This is a high magnification for such an aperture. Unless you''re primarily a double-star observer, try using an eyepiece with a focal length greater than ' + IntToStr(floor(focal_length / (2 * aperture) + 0.5)) + 'mm.');
 
 
-  if ((true_field >= 1.0) and (true_field < 1.5)) then
-    scope_info := scope_info + '(The Pleiades could fit snuggly into the field of view)'
-      +
-      #13#10;
+    if (exit_pupil > 7) then
+      ShowMessage(
+        'To ensure that the eyepiece''s exit pupil is fully accommodated by your dark adapted eye, try selecting an eyepiece with a focal length less than ' + IntToStr(floor(7 * focal_ratio)) + 'mm.');
 
 
-  if ((true_field >= 0.6) and (true_field < 1.0)) then
-    scope_info := scope_info + '(The full Moon would easily fit into the field of view)'
-      +
-      #13#10;
+    if ((barlow_factor <> 1) and (focal_reducer <> 1)) then
+      ShowMessage('Are you sure that you wish to use a focal reducer and a Barlow lens together?');
 
 
-  if ((true_field >= 0.50) and (true_field < 0.6)) then
-    scope_info := scope_info + '(The full Moon could just fit within the field of view)'
-      + #13#10;
+    scope_info := 'Focal Length:  ' + floattostr(round_fifth(focal_length)) + 'mm   ';
+
+    if (focal_reducer <> 1.0) then
+      scope_info := scope_info + '(You are using a ' + floattostr(focal_reducer) +
+        'x focal reducer)';
 
 
-  if ((true_field >= 0.35) and (true_field < 0.5)) then
-    scope_info := scope_info +
-      '(The full Moon would not quite fit into the field of view)' + #13#10;
+    if (barlow_factor <> 1.0) then
+      scope_info := scope_info + '(You are using a ' + floattostr(barlow_factor) +
+        'x Barlow lens)';
 
-  if ((true_field >= 0.25) and (true_field < 0.35)) then
-    scope_info := scope_info +
-      '(About half of the full Moon''s disc would fit into the field of view)' + #13#10;
+    scope_info := scope_info + #13#10;
 
-  if (true_field < 0.25) then
-    scope_info := scope_info +
-      '(Less than half of the full Moon''s disc would fit into the field of view)'
-      + #13#10;
 
-  scope_info := scope_info + 'Exit Pupil: ' + floattostr(exit_pupil) + ' mm' + #13#10;
+    scope_info := scope_info + 'Magnification: ' + IntToStr(floor(magnification + 0.5)) +
+      'x' + #13#10;
 
-  scope_info := scope_info + 'Theoretical Resolving Power: ' +
-    floattostr(resolving_power) + ' arcseconds' + #13#10;
+    scope_info := scope_info + 'True Field of View: ' + floattostr(true_field) +
+      ' (degree) ';
 
-  scope_info := scope_info + 'Approximate Limiting Magnitude of Telescope: +' +
-    floattostr(limiting_magnitude) + ' (under dark, moonless skies)';
-  memo1.Text := scope_info;
-   except
+    if ((true_field >= 3.5) and (true_field < 7)) then
+      scope_info := scope_info + '(Orion''s Belt could easily fit into the field of view)'
+        + #13#10;
+
+
+
+    if ((true_field >= 2.8) and (true_field < 3.5)) then
+      scope_info := scope_info +
+        '(Orion''s Belt would fit snuggly into the field of view)' + #13#10;
+
+
+    if ((true_field >= 1.5) and (true_field < 2.8)) then
+      scope_info := scope_info + '(The Pleiades would easily fit into the field of view)'
+        + #13#10;
+
+
+    if ((true_field >= 1.0) and (true_field < 1.5)) then
+      scope_info := scope_info + '(The Pleiades could fit snuggly into the field of view)'
+        + #13#10;
+
+
+    if ((true_field >= 0.6) and (true_field < 1.0)) then
+      scope_info := scope_info + '(The full Moon would easily fit into the field of view)'
+        + #13#10;
+
+
+    if ((true_field >= 0.50) and (true_field < 0.6)) then
+      scope_info := scope_info + '(The full Moon could just fit within the field of view)'
+        + #13#10;
+
+
+    if ((true_field >= 0.35) and (true_field < 0.5)) then
+      scope_info := scope_info +
+        '(The full Moon would not quite fit into the field of view)' + #13#10;
+
+    if ((true_field >= 0.25) and (true_field < 0.35)) then
+      scope_info := scope_info +
+        '(About half of the full Moon''s disc would fit into the field of view)' + #13#10;
+
+    if (true_field < 0.25) then
+      scope_info := scope_info +
+        '(Less than half of the full Moon''s disc would fit into the field of view)'
+        + #13#10;
+
+    scope_info := scope_info + 'Exit Pupil: ' + floattostr(exit_pupil) + ' mm' + #13#10;
+
+    scope_info := scope_info + 'Theoretical Resolving Power: ' +
+      floattostr(resolving_power) + ' arcseconds' + #13#10;
+
+    scope_info := scope_info + 'Approximate Limiting Magnitude of Telescope: +' +
+      floattostr(limiting_magnitude) + ' (under dark, moonless skies)';
+    memo1.Text := scope_info;
+  except
     on E: Exception do
       DumpExceptionCallStack(E, 'showmessage');
 
@@ -288,7 +282,7 @@ begin
   Result := TryStrToFloat(inStr, i);
 end;
 
- procedure tform2.logit(message: string);
+procedure tform2.logit(message: string);
 begin
 
   if (memo1.Lines.Count > 50) then
