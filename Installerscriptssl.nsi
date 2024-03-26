@@ -25,7 +25,12 @@ RequestExecutionLevel admin
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\spacegetti.exe"
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION RunProgram
+Function RunProgram
+  ShellExecAsUser::ShellExecAsUser "open" '"$INSTDIR\spacegetti.exe"'
+ ; ExecShell 'runas' '"$INSTDIR\spacegetti.exe"' /trustlevel:0x20000
+FunctionEnd
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
