@@ -732,7 +732,8 @@ begin
                 //  renderer.free;
                 //end;
               finally
-
+                 //if Assigned(renderer) then    renderer.Free;
+                bmp.FontRenderer := nil;
                 bmp.Free;
               end;
 
@@ -1174,7 +1175,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=keyhere';
+          'https://api.ipstack.com/check?access_key=keygoeshere';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');
