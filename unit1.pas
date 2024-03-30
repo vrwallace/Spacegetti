@@ -121,7 +121,7 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  //ShowMessage('Email: vonwallace@yahoo.com');
+
    openurl('https://vonwallace.com');
 end;
 
@@ -174,10 +174,7 @@ end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-  //MyThread.Terminate;
 
-  // FreeOnTerminate is true so we should not write:
-  // MyThread.Free;
   inherited;
 end;
 
@@ -429,7 +426,6 @@ end;
 
 procedure TMyThread.Execute;
 var
-
   datestring: string;
   bmp, map: TBGRABitmap;
   dm: tDEVMODE;
@@ -451,9 +447,7 @@ var
   renderer: TBGRATextEffectFontRenderer;
   locationname: string;
 begin
-
-  logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
-    FormatDateTime('MM/DD/YYYY', now)) + ' GET: Thread Start');
+  logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: Thread Start');
 
   my_array[0] := 'full_disk/natural_color/:full_disk:goes-16';
   my_array[1] := 'full_disk/geocolor/:full_disk:goes-16';
@@ -461,40 +455,19 @@ begin
   my_array[3] := 'conus/natural_color/:conus:goes-16';
   my_array[4] := 'conus/geocolor/:conus:goes-16';
   my_array[5] := 'conus/band_13/:conus:goes-16';
-
-  // my_array[6] := 'full_disk/natural_color/:full_disk:goes-17';
-  //my_array[7] := 'full_disk/geocolor/:full_disk:goes-17';
-  //my_array[8] := 'full_disk/band_13/:full_disk:goes-17';
-  //my_array[9] := 'conus/natural_color/:conus:goes-17';
-  //my_array[10] := 'conus/geocolor/:conus:goes-17';
-  //my_array[11] := 'conus/band_13/:conus:goes-17';
-
-
   my_array[6] := 'full_disk/natural_color/:full_disk:himawari';
   my_array[7] := 'full_disk/geocolor/:full_disk:himawari';
   my_array[8] := 'full_disk/band_13/:full_disk:himawari';
-
-
   my_array[9] := 'northern_hemisphere/eumetsat_natural_color/:northern_hemisphere:jpss';
   my_array[10] := 'northern_hemisphere/cira_geocolor/:northern_hemisphere:jpss';
   my_array[11] := 'northern_hemisphere/band_m15/:northern_hemisphere:jpss';
-
   my_array[12] := 'southern_hemisphere/eumetsat_natural_color/:southern_hemisphere:jpss';
   my_array[13] := 'southern_hemisphere/cira_geocolor/:southern_hemisphere:jpss';
   my_array[14] := 'southern_hemisphere/band_m15/:southern_hemisphere:jpss';
 
-
-
   try
-
-    //[here goes the code of the main thread loop]
-
-
-
-
     with TFPHttpClient.Create(nil) do
     begin
-
       IOtimeout := 120000;
       AllowRedirect := True;
 
@@ -505,153 +478,84 @@ begin
           mapchecked := form1.CheckBoxmap.Checked;
           resizechecked := form1.checkboxresize.Checked;
 
-
           if ((sourceindex > -1) and (sourceindex < 30)) then
           begin
             if ((sourceindex > -1) and (sourceindex < 15)) then
             begin
-
               productpath := ExtractDelimited(1, my_array[sourceindex], [#58]);
-
-
               mappath := ExtractDelimited(2, my_array[sourceindex], [#58]);
-
               sat := ExtractDelimited(3, my_array[sourceindex], [#58]);
 
-            {datestring := FormatDateTime('YYYYMMDD',
-              IncMinute(Now, GetLocalTimeOffset));}
-
-
-              jsonstring :=
-                'https://rammb-slider.cira.colostate.edu/data/json/' +
-                sat + '/' + productpath + 'available_dates.json';
+              jsonstring := 'https://rammb-slider.cira.colostate.edu/data/json/' + sat + '/' + productpath + 'available_dates.json';
               datestring := getlatestimagedate('dates_int', jsonstring);
               if (trim(datestring) = '') then
                 exit;
 
-
-
-              jsonstring :=
-                'https://rammb-slider.cira.colostate.edu/data/json/' +
-                sat + '/' + productpath + datestring + '_by_hour.json';
+              jsonstring := 'https://rammb-slider.cira.colostate.edu/data/json/' + sat + '/' + productpath + datestring + '_by_hour.json';
               jsondatestring := getlatestimagedate('timestamps_int', jsonstring);
               if (trim(jsondatestring) = '') then
                 exit;
 
-              // Extract year, month, and day components from the datestring
               year := StrToInt(Copy(datestring, 1, 4));
               month := StrToInt(Copy(datestring, 5, 2));
               day := StrToInt(Copy(datestring, 7, 2));
-
-              // Create a TDateTime value from the extracted components
               datestring := FormatDateTime('yyyy/mm/dd', EncodeDate(year, month, day));
 
-
-              Source := 'https://rammb-slider.cira.colostate.edu/data/imagery/' +
-                datestring + '/' + sat + '---' + productpath +
-                jsondatestring + '/00/000_000.png';
-
+              Source := 'https://rammb-slider.cira.colostate.edu/data/imagery/' + datestring + '/' + sat + '---' + productpath + jsondatestring + '/00/000_000.png';
             end
             else
             begin
-
               case sourceindex of
                 19:
-                begin
-                  Source := htmlgetvalue('https://apod.nasa.gov/apod/astropix.html',
-                    '<IMG SRC="');
-                  Source := 'https://apod.nasa.gov/apod/' + Source;
-
-                  //thumbnails only
-                  {Source := htmlgetvalue('https://apod.nasa.gov/apod.rss',
-                    '&#60;img src="');}
-                end;
-                {14: Source := htmlgetvalue(
-                    'https://earthobservatory.nasa.gov/IOTD/index.php', '<img src="');}
-
-                20: Source := htmlgetvalue(
-                    'https://earthobservatory.nasa.gov/feeds/image-of-the-day.rss',
-                    'src="');
-
-
-                21: Source := htmlgetvalue(
-                    'https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss',
-                    '<enclosure url="');
-
+                  Source := 'https://apod.nasa.gov/apod/' + htmlgetvalue('https://apod.nasa.gov/apod/astropix.html', '<IMG SRC="');
+                20:
+                  Source := htmlgetvalue('https://earthobservatory.nasa.gov/feeds/image-of-the-day.rss', 'src="');
+                21:
+                  Source := htmlgetvalue('https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss', '<enclosure url="');
                 22:
                 begin
                   Source := ExtractDelimited(1, constructstarmapurl, [#124]);
                   locationname := ExtractDelimited(2, constructstarmapurl, [#124]);
                 end;
-                23: Source := htmlgetvalue(
-                    'https://www.heartlight.org/cgi-shl/todaysverse.cgi',
-                    '<h4>Illustration</h4><img src="');
+                23:
+                  Source := htmlgetvalue('https://www.heartlight.org/cgi-shl/todaysverse.cgi', '<h4>Illustration</h4><img src="');
                 else
-                  Source := 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_' +
-                    rightstr(sourcetext, (length(sourcetext) -
-                    pos(':', sourcetext)) - 1) + '_0193.jpg';
-
+                  Source := 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_' + rightstr(sourcetext, (length(sourcetext) - pos(':', sourcetext)) - 1) + '_0193.jpg';
               end;
             end;
 
             filepath := getsetpath;
 
-
-            logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
-              FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + Source);
+            logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + Source);
 
             s := get(Source);
 
             if (ResponseStatusCode = 200) then
             begin
-
               bmp := TBGRABitmap.Create;
               try
                 AStream := TStringStream.Create(s);
                 try
-
                   bmp.LoadFromStream(astream);
-
                 finally
                   AStream.Free;
                 end;
 
-                if ((sourceindex > -1) and (sourceindex < 15) and
-                  (mapchecked)) then
+                if ((sourceindex > -1) and (sourceindex < 15) and (mapchecked)) then
                 begin
-                  //start
-
-
-
-
-                  jsonstring :=
-                    'https://rammb-slider.cira.colostate.edu/data/json/' +
-                    sat + '/' + mappath + '/maps/borders/white/latest_times_all.json';
-                  jsondatestringmap :=
-                    getlatestimagedate('timestamps_int_map', jsonstring);
+                  jsonstring := 'https://rammb-slider.cira.colostate.edu/data/json/' + sat + '/' + mappath + '/maps/borders/white/latest_times_all.json';
+                  jsondatestringmap := getlatestimagedate('timestamps_int_map', jsonstring);
                   if (trim(jsondatestringmap) = '') then
                     exit;
 
-                  //https://rammb-slider.cira.colostate.edu/data/maps/goes-16/full_disk/borders/white/20171201010000/00/000_000.png
-
-                  sourcemap :=
-                    'https://rammb-slider.cira.colostate.edu/data/maps/' +
-                    sat + '/' + mappath + '/borders/white/' +
-                    jsondatestringmap + '/00/000_000.png';
-                  // https://rammb-slider.cira.colostate.edu/data/json/goes-16/full_disk/maps/borders/white/latest_times_all.json
-                  logit(trim(FormatDateTime('h:nn:ss AM/PM', now) +
-                    ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + Sourcemap);
+                  sourcemap := 'https://rammb-slider.cira.colostate.edu/data/maps/' + sat + '/' + mappath + '/borders/white/' + jsondatestringmap + '/00/000_000.png';
+                  logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: ' + Sourcemap);
                   smap := get(sourcemap);
                   if (ResponseStatusCode <> 200) then
                   begin
-                    logit(trim(FormatDateTime('h:nn:ss AM/PM', now) +
-                      ' ' + FormatDateTime('MM/DD/YYYY', now)) +
-                      ' ERROR - Reponse Code: ' + IntToStr(responsestatuscode));
+                    logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' ERROR - Reponse Code: ' + IntToStr(responsestatuscode));
                     exit;
                   end;
-
-
-
 
                   AStream := TStringStream.Create(smap);
                   try
@@ -660,27 +564,18 @@ begin
                       map.LoadFromStream(astream);
                       bmp.PutImage(0, 0, map, dmDrawWithTransparency);
                     finally
-
                       map.Free;
                     end;
                   finally
                     astream.Free;
-
                   end;
-
                 end;
 
-                if ((resizechecked) and (sourceindex <> 22))then
+                if ((resizechecked) and (sourceindex <> 22)) then
                 begin
-
                   FillChar(dm, SizeOf(dm), #0);
                   dm.dmSize := sizeof(dm);
                   EnumDisplaySettings(nil, ENUM_REGISTRY_SETTINGS, @dm);
-                  // ENUM_REGISTRY_SETTINGS
-                  //ENUM_CURRENT_SETTINGS
-                  // showmessage(inttostr(dm.dmPelsHeight));
-                  // showmessage(inttostr(dm.dmPelsWidth));
-
 
                   ratioX := dm.dmPelsWidth / bmp.Width;
                   ratioY := dm.dmPelsHeight / bmp.Height;
@@ -690,83 +585,54 @@ begin
                   newHeight := trunc(bmp.Height * ratio);
 
                   bmp.ResampleFilter := rfBestQuality;
-                  // bmp.ResampleFilter := rfLanczos3;
-                  //chg
-                  BGRAReplace(BMP, bmp.resample(newwidth, newheight) as
-                    TBGRABitmap);
-
+                  BGRAReplace(BMP, bmp.resample(newwidth, newheight) as TBGRABitmap);
                 end;
 
                 c := ColorToBGRA(ColorToRGB(cllime));
                 renderer := TBGRATextEffectFontRenderer.Create;
-                //try
-                bmp.FontRenderer := renderer;
+                try
+                  bmp.FontRenderer := renderer;
 
-                renderer.ShadowVisible := True;
-                renderer.OutlineVisible := True;
-                renderer.OutlineColor := BGRABlack;
-                renderer.OuterOutlineOnly := True;
+                  renderer.ShadowVisible := True;
+                  renderer.OutlineVisible := True;
+                  renderer.OutlineColor := BGRABlack;
+                  renderer.OuterOutlineOnly := True;
 
-                //bmp.FontQuality:= fqFineAntialiasing;
+                  bmp.FontHeight := 25;
+                  bmp.FontAntialias := False;
+                  bmp.FontStyle := [fsBold];
 
-                bmp.FontHeight := 25;
-                bmp.FontAntialias := False;
-                bmp.FontStyle := [fsBold];
+                  if (sourceindex < 15) then
+                    bmp.TextRect(rect(0, 0, 400, bmp.Height), ' UTC: ' + jsondatestring, taLeftJustify, tltop, c);
+                  if (sourceindex = 22) then
+                    bmp.TextRect(rect(0, 0, 400, bmp.Height), locationname, taLeftJustify, tltop, c);
 
+                  bmp.TextOut(bmp.Width, 0, 'God Is Love - 1 John 4:7-21', c, taRightJustify);
 
-
-                if (sourceindex < 15) then
-                  bmp.TextRect(rect(0, 0, 400, bmp.Height), ' UTC: ' + jsondatestring,
-                    taLeftJustify, tltop, c);
-                if (sourceindex = 22) then
-                  bmp.TextRect(rect(0, 0, 400, bmp.Height), locationname,
-                    taLeftJustify, tltop, c);
-
-                // bmp.TextOut(bmp.Width, bmp.Height - bmp.FontFullHeight
-                bmp.TextOut(bmp.Width, 0,
-                  'God Is Love - 1 John 4:7-21', c, taRightJustify);
-
-                bmp.SaveToFile(filepath + 'source.bmp');
-                setdesktop(filepath + 'source.bmp');
-                // finally
-                //  renderer.free;
-                //end;
+                  bmp.SaveToFile(filepath + 'source.bmp');
+                  setdesktop(filepath + 'source.bmp');
+                finally
+                 bmp.FontRenderer:= nil;
+                end;
               finally
-                 //if Assigned(renderer) then    renderer.Free;
-                bmp.FontRenderer := nil;
                 bmp.Free;
               end;
-
             end
             else
             begin
-
-              logit(trim(FormatDateTime('h:nn:ss AM/PM', now) +
-                ' ' + FormatDateTime('MM/DD/YYYY', now)) +
-                ' ERROR - Reponse Code: ' + IntToStr(responsestatuscode));
-
+              logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' ERROR - Reponse Code: ' + IntToStr(responsestatuscode));
             end;
           end;
-
-
         except
           on E: Exception do
             DumpExceptionCallStack(E);
-
         end;
-
       finally
         Free;
-
       end;
     end;
-
-
   finally
-
-    logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
-      FormatDateTime('MM/DD/YYYY', now)) + ' GET: Thread Complete');
-
+    logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: Thread Complete');
   end;
 end;
 
@@ -809,7 +675,7 @@ begin
         //https://rammb-slider.cira.colostate.edu/data/json/goes-16/full_disk/maps/borders/white/latest_times_all.json
         if (ResponseStatusCode = 200) then
         begin
-          // try
+
           try
             jData := GetJSON(s);
             jArray := TJSONArray(jData.FindPath(groupname));
@@ -821,14 +687,7 @@ begin
             jarray.Free;
 
           end;
-          {except
-            on E: Exception do
-            begin
-              Result := '';
-              DumpExceptionCallStack(E);
-            end;
 
-          end;}
         end
         else
         begin
@@ -990,7 +849,7 @@ begin
 
         if (ResponseStatusCode = 200) then
         begin
-          //try
+
           begin
 
             imageurltemp := rightstr(s, (length(s) - pos(startvalue, s)) -
@@ -999,14 +858,7 @@ begin
 
             Result := imageurl;
           end;
-          {except
-            on E: Exception do
-            begin
-              Result := '';
-              DumpExceptionCallStack(E);
-            end;
 
-          end;}
         end
         else
         begin
@@ -1072,7 +924,7 @@ begin
 
         if (ResponseStatusCode = 200) then
         begin
-          //try
+
           begin
 
             startvalue :=
@@ -1100,15 +952,7 @@ begin
 
             fieldtimefix := yearval + monthval + dayval + hourval + minval + secval;
 
-            {  startvalue:='<input type="hidden" name="HiddenFieldLatitude" id="HiddenFieldLatitude" value="';
-             valtemp := rightstr(s, (length(s) - pos(startvalue, s)) -
-              length(startvalue) + 1);
-            fieldlat := leftstr(valtemp, pos('"', valtemp) - 1);
 
-             startvalue:='<input type="hidden" name="HiddenFieldLongitude" id="HiddenFieldLongitude" value="';
-             valtemp := rightstr(s, (length(s) - pos(startvalue, s)) -
-              length(startvalue) + 1);
-            fieldlong := leftstr(valtemp, pos('"', valtemp) - 1);}
 
             rbase := min(screen.Height, screen.Width);
             Result := 'https://www.skymaponline.net/Handler1.ashx?r=' +
@@ -1119,14 +963,7 @@ begin
               '&h=' + IntToStr(rbase) + '|' + locationnameval;
 
           end;
-          {except
-            on E: Exception do
-            begin
-              Result := '';
-              DumpExceptionCallStack(E);
-            end;
 
-          end;}
         end
         else
         begin
@@ -1175,7 +1012,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=keygoeshere';
+          'https://api.ipstack.com/check?access_key=enterkeyhere';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');
@@ -1187,7 +1024,7 @@ begin
 
         if (ResponseStatusCode = 200) then
         begin
-          //try
+
           begin
 
             startvalue := '"latitude":';
@@ -1221,14 +1058,7 @@ begin
               trim(cityval + ' ' + regionval + ' ' + countryval);
 
           end;
-          {except
-            on E: Exception do
-            begin
-              Result := '';
-              DumpExceptionCallStack(E);
-            end;
 
-          end;}
         end
         else
         begin
