@@ -888,7 +888,7 @@ end;
 function TMyThread.constructstarmapurl: string;
 var
   s: string;
-
+  dm: tDEVMODE;
   sourceurl: string;
   fieldlatandlong, fieldtime, fieldtimefix, fieldlat, fieldlong: string;
   startvalue, valtemp: string;
@@ -953,8 +953,12 @@ begin
             fieldtimefix := yearval + monthval + dayval + hourval + minval + secval;
 
 
+             FillChar(dm, SizeOf(dm), #0);
+                  dm.dmSize := sizeof(dm);
+                  EnumDisplaySettings(nil, ENUM_REGISTRY_SETTINGS, @dm);
 
-            rbase := min(screen.Height, screen.Width);
+
+            rbase := min( dm.dmPelsWidth,dm.dmPelsHeight);
             Result := 'https://www.skymaponline.net/Handler1.ashx?r=' +
               IntToStr((rbase div 2) - 15) + '&x=' + IntToStr(
               (rbase div 2) - 15) + '&y=' + IntToStr((rbase div 2) - 15) +
@@ -1012,7 +1016,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=enterkeyhere';
+          'https://api.ipstack.com/check?access_key=b3e2dd64f0f20af6faff0750f035e30e';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');
