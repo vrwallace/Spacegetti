@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 1222
+  Left = 1629
   Height = 668
-  Top = 200
+  Top = 235
   Width = 579
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Spacegetti V 1.24'
+  Caption = 'Spacegetti V 1.25'
   ClientHeight = 668
   ClientWidth = 579
   DesignTimePPI = 144
@@ -1991,12 +1991,16 @@ object Form1: TForm1
         'G16 CONUS Natural Color'
         'G16 CONUS GeoColor'
         'G16 CONUS Band 13 (10.3um)'
+        'MSG Full Disk Natural Color'
+        'MSG Full Disk GeoColor'
+        'MET Full Disk Natural Color'
+        'MET Full Disk GeoColor'
         'H8 Full Disk Natural Color'
         'H8 Full Disk GeoColor'
         'H8 Full Disk Band 13 (10.3um)'
         'JPSS Northern Hemisphere Natural Color'
         'JPSS Northern Hemisphere GeoColor'
-        'JPSS Northern Hemisphere Band 13 (10.763um)'
+        'JPSS Northern Hemisphere Band 15 (10.763um)'
         'JPSS Southern Hemisphere Natural Color'
         'JPSS Southern Hemisphere GeoColor'
         'JPSS Southern Hemisphere Band 15 (10.763um)'
@@ -2007,7 +2011,7 @@ object Form1: TForm1
         'NASA Astronomy Picture of the Day'
         'NASA Earth Observatory Image of the Day'
         'NASA Image of the Day'
-        'Real Time Sky Map  (www.skymaponline.net)'
+        'Real Time Sky Map (www.skymaponline.net)'
         'Verse of the Day (www.heartlight.org)'
       )
       ItemWidth = 500

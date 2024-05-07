@@ -440,7 +440,7 @@ var
   sourcetext: string;
   mapchecked: bool;
   resizechecked: bool;
-  my_array: array[0..20] of string;
+  my_array: array[0..18] of string;
   sat: string;
   ratio, ratiox, ratioy: double;
   newwidth, newheight, year, month, day: integer;
@@ -455,15 +455,19 @@ begin
   my_array[3] := 'conus/natural_color/:conus:goes-16';
   my_array[4] := 'conus/geocolor/:conus:goes-16';
   my_array[5] := 'conus/band_13/:conus:goes-16';
-  my_array[6] := 'full_disk/natural_color/:full_disk:himawari';
-  my_array[7] := 'full_disk/geocolor/:full_disk:himawari';
-  my_array[8] := 'full_disk/band_13/:full_disk:himawari';
-  my_array[9] := 'northern_hemisphere/eumetsat_natural_color/:northern_hemisphere:jpss';
-  my_array[10] := 'northern_hemisphere/cira_geocolor/:northern_hemisphere:jpss';
-  my_array[11] := 'northern_hemisphere/band_m15/:northern_hemisphere:jpss';
-  my_array[12] := 'southern_hemisphere/eumetsat_natural_color/:southern_hemisphere:jpss';
-  my_array[13] := 'southern_hemisphere/cira_geocolor/:southern_hemisphere:jpss';
-  my_array[14] := 'southern_hemisphere/band_m15/:southern_hemisphere:jpss';
+  my_array[6] := 'full_disk/natural_color/:full_disk:meteosat-0deg';
+  my_array[7] := 'full_disk/geocolor/:full_disk:meteosat-0deg';
+  my_array[8] := 'full_disk/natural_color/:full_disk:meteosat-9';
+  my_array[9] := 'full_disk/geocolor/:full_disk:meteosat-9';
+  my_array[10] := 'full_disk/natural_color/:full_disk:himawari';
+  my_array[11] := 'full_disk/geocolor/:full_disk:himawari';
+  my_array[12] := 'full_disk/band_13/:full_disk:himawari';
+  my_array[13] := 'northern_hemisphere/eumetsat_natural_color/:northern_hemisphere:jpss';
+  my_array[14] := 'northern_hemisphere/cira_geocolor/:northern_hemisphere:jpss';
+  my_array[15] := 'northern_hemisphere/band_m15/:northern_hemisphere:jpss';
+  my_array[16] := 'southern_hemisphere/eumetsat_natural_color/:southern_hemisphere:jpss';
+  my_array[17] := 'southern_hemisphere/cira_geocolor/:southern_hemisphere:jpss';
+  my_array[18] := 'southern_hemisphere/band_m15/:southern_hemisphere:jpss';
 
   try
     with TFPHttpClient.Create(nil) do
@@ -480,7 +484,7 @@ begin
 
           if ((sourceindex > -1) and (sourceindex < 30)) then
           begin
-            if ((sourceindex > -1) and (sourceindex < 15)) then
+            if ((sourceindex > -1) and (sourceindex < 19)) then
             begin
               productpath := ExtractDelimited(1, my_array[sourceindex], [#58]);
               mappath := ExtractDelimited(2, my_array[sourceindex], [#58]);
@@ -506,22 +510,24 @@ begin
             else
             begin
               case sourceindex of
-                19:
-                  Source := 'https://apod.nasa.gov/apod/' + htmlgetvalue('https://apod.nasa.gov/apod/astropix.html', '<IMG SRC="');
-                20:
-                  Source := htmlgetvalue('https://earthobservatory.nasa.gov/feeds/image-of-the-day.rss', 'src="');
-                21:
-                  Source := htmlgetvalue('https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss', '<enclosure url="');
-                22:
-                begin
-                  Source := ExtractDelimited(1, constructstarmapurl, [#124]);
-                  locationname := ExtractDelimited(2, constructstarmapurl, [#124]);
-                end;
-                23:
-                  Source := htmlgetvalue('https://www.heartlight.org/cgi-shl/todaysverse.cgi', '<h4>Illustration</h4><img src="');
-                else
-                  Source := 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_' + rightstr(sourcetext, (length(sourcetext) - pos(':', sourcetext)) - 1) + '_0193.jpg';
-              end;
+  19..22:
+    Source := 'https://sdo.gsfc.nasa.gov/assets/img/latest/latest_' + rightstr(sourcetext, (length(sourcetext) - pos(':', sourcetext)) - 1) + '_0193.jpg';
+  23:
+    Source := 'https://apod.nasa.gov/apod/' + htmlgetvalue('https://apod.nasa.gov/apod/astropix.html', '<IMG SRC="');
+  24:
+    Source := htmlgetvalue('https://earthobservatory.nasa.gov/feeds/image-of-the-day.rss', 'src="');
+  25:
+    Source := htmlgetvalue('https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss', '<enclosure url="');
+  26:
+  begin
+    Source := ExtractDelimited(1, constructstarmapurl, [#124]);
+    locationname := ExtractDelimited(2, constructstarmapurl, [#124]);
+  end;
+  27:
+    Source := htmlgetvalue('https://www.heartlight.org/cgi-shl/todaysverse.cgi', '<h4>Illustration</h4><img src="');
+  else
+    Source := '';
+end;
             end;
 
             filepath := getsetpath;
@@ -541,7 +547,7 @@ begin
                   AStream.Free;
                 end;
 
-                if ((sourceindex > -1) and (sourceindex < 15) and (mapchecked)) then
+                if ((sourceindex > -1) and (sourceindex < 19) and (mapchecked)) then
                 begin
                   jsonstring := 'https://rammb-slider.cira.colostate.edu/data/json/' + sat + '/' + mappath + '/maps/borders/white/latest_times_all.json';
                   jsondatestringmap := getlatestimagedate('timestamps_int_map', jsonstring);
@@ -571,7 +577,7 @@ begin
                   end;
                 end;
 
-                if ((resizechecked) and (sourceindex <> 22)) then
+                if ((resizechecked) and (sourceindex <> 26)) then
                 begin
                   FillChar(dm, SizeOf(dm), #0);
                   dm.dmSize := sizeof(dm);
@@ -602,7 +608,7 @@ begin
                   bmp.FontAntialias := False;
                   bmp.FontStyle := [fsBold];
 
-                  if (sourceindex < 15) then
+                  if (sourceindex < 19) then
                     bmp.TextRect(rect(0, 0, 400, bmp.Height), ' UTC: ' + jsondatestring, taLeftJustify, tltop, c);
                   if (sourceindex = 22) then
                     bmp.TextRect(rect(0, 0, 400, bmp.Height), locationname, taLeftJustify, tltop, c);
@@ -612,7 +618,7 @@ begin
                   bmp.SaveToFile(filepath + 'source.bmp');
                   setdesktop(filepath + 'source.bmp');
                 finally
-                 bmp.FontRenderer:= nil;
+                  bmp.FontRenderer := nil;
                 end;
               finally
                 bmp.Free;
