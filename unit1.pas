@@ -610,7 +610,7 @@ end;
 
                   if (sourceindex < 19) then
                     bmp.TextRect(rect(0, 0, 400, bmp.Height), ' UTC: ' + jsondatestring, taLeftJustify, tltop, c);
-                  if (sourceindex = 22) then
+                  if (sourceindex = 26) then
                     bmp.TextRect(rect(0, 0, 400, bmp.Height), locationname, taLeftJustify, tltop, c);
 
                   bmp.TextOut(bmp.Width, 0, 'God Is Love - 1 John 4:7-21', c, taRightJustify);
@@ -1022,7 +1022,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=key';
+          'https://api.ipstack.com/check?access_key=b3e2dd64f0f20af6faff0750f035e30e';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');

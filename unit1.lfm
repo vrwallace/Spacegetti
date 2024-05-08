@@ -5,7 +5,7 @@ object Form1: TForm1
   Width = 579
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Spacegetti V 1.25'
+  Caption = 'Spacegetti V 1.26'
   ClientHeight = 668
   ClientWidth = 579
   DesignTimePPI = 144
