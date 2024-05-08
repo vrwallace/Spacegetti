@@ -1022,7 +1022,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=b3e2dd64f0f20af6faff0750f035e30e';
+          'https://api.ipstack.com/check?access_key=key';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');
