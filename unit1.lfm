@@ -5,7 +5,7 @@ object Form1: TForm1
   Width = 579
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Spacegetti V 1.26'
+  Caption = 'Spacegetti V 1.27'
   ClientHeight = 668
   ClientWidth = 579
   DesignTimePPI = 144
@@ -1925,14 +1925,14 @@ object Form1: TForm1
     87C79B739F453EA1E7EFE59589FE011B607747FDF0BBD60000000049454E44AE
     426082
   }
+  Position = poScreenCenter
+  LCLVersion = '4.0.0.4'
+  Visible = True
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = loadsettings
   OnDestroy = FormDestroy
   OnWindowStateChange = FormWindowStateChange
-  Position = poScreenCenter
-  LCLVersion = '3.2.0.0'
-  Visible = True
   object Button1: TButton
     Left = 346
     Height = 38
@@ -1985,12 +1985,12 @@ object Form1: TForm1
       Width = 264
       ItemHeight = 25
       Items.Strings = (
-        'G16 Full Disk Natural Color'
-        'G16 Full Disk GeoColor'
-        'G16 Full Disk Band 13 (10.3um)'
-        'G16 CONUS Natural Color'
-        'G16 CONUS GeoColor'
-        'G16 CONUS Band 13 (10.3um)'
+        'G19 Full Disk Natural Color'
+        'G19 Full Disk GeoColor'
+        'G19 Full Disk Band 13 (10.3um)'
+        'G19 CONUS Natural Color'
+        'G19 CONUS GeoColor'
+        'G19 CONUS Band 13 (10.3um)'
         'MSG Full Disk Natural Color'
         'MSG Full Disk GeoColor'
         'MET Full Disk Natural Color'
@@ -2050,11 +2050,11 @@ object Form1: TForm1
       Width = 108
       MaxValue = 1440
       MinValue = 5
-      OnChange = savesettings
       ParentFont = False
       TabStop = False
       TabOrder = 3
       Value = 15
+      OnChange = savesettings
     end
     object Label1: TLabel
       Left = 132

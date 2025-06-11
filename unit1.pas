@@ -449,12 +449,12 @@ var
 begin
   logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' + FormatDateTime('MM/DD/YYYY', now)) + ' GET: Thread Start');
 
-  my_array[0] := 'full_disk/natural_color/:full_disk:goes-16';
-  my_array[1] := 'full_disk/geocolor/:full_disk:goes-16';
-  my_array[2] := 'full_disk/band_13/:full_disk:goes-16';
-  my_array[3] := 'conus/natural_color/:conus:goes-16';
-  my_array[4] := 'conus/geocolor/:conus:goes-16';
-  my_array[5] := 'conus/band_13/:conus:goes-16';
+  my_array[0] := 'full_disk/natural_color/:full_disk:goes-19';
+  my_array[1] := 'full_disk/geocolor/:full_disk:goes-19';
+  my_array[2] := 'full_disk/band_13/:full_disk:goes-19';
+  my_array[3] := 'conus/natural_color/:conus:goes-19';
+  my_array[4] := 'conus/geocolor/:conus:goes-19';
+  my_array[5] := 'conus/band_13/:conus:goes-19';
   my_array[6] := 'full_disk/natural_color/:full_disk:meteosat-0deg';
   my_array[7] := 'full_disk/geocolor/:full_disk:meteosat-0deg';
   my_array[8] := 'full_disk/natural_color/:full_disk:meteosat-9';
@@ -549,6 +549,8 @@ end;
 
                 if ((sourceindex > -1) and (sourceindex < 19) and (mapchecked)) then
                 begin
+
+
                   jsonstring := 'https://rammb-slider.cira.colostate.edu/data/json/' + sat + '/' + mappath + '/maps/borders/white/latest_times_all.json';
                   jsondatestringmap := getlatestimagedate('timestamps_int_map', jsonstring);
                   if (trim(jsondatestringmap) = '') then
@@ -686,9 +688,24 @@ begin
             jData := GetJSON(s);
             jArray := TJSONArray(jData.FindPath(groupname));
             if groupprocess = 1 then
-              Result := trim(jarray.Arrays[0].Strings[0]);
+            begin
+               Result := trim(jarray.Arrays[0].Strings[0]);
+               logit(inttostr(groupprocess)+ ' ' +groupname+ ' '+ result);
+            end;
+
             if groupprocess = 2 then
+            BEGIN
+            if (jarray.count > 1) AND (groupname='timestamps_int')then
+            begin
+            Result := trim(jarray.Strings[jarray.count-1]);
+             logit(inttostr(groupprocess)+ ' ' +groupname+ ' '+ result);
+             end
+             else
               Result := trim(jarray.Strings[0]);
+             logit(inttostr(groupprocess)+ ' ' +groupname+ ' '+ result);
+             END;
+
+            // Result := Trim(jarray.Strings[jarray.Strings.Count - 1]);
           finally
             jarray.Free;
 
@@ -719,6 +736,8 @@ begin
 
   end;
 end;
+
+
 
 procedure TMyThread.logit(message: string);
 begin
@@ -1022,7 +1041,7 @@ begin
       try
 
         sourceurl :=
-          'https://api.ipstack.com/check?access_key=key';
+          'https://api.ipstack.com/check?access_key=b3e2dd64f0f20af6faff0750f035e30e';
 
         logit(trim(FormatDateTime('h:nn:ss AM/PM', now) + ' ' +
           FormatDateTime('MM/DD/YYYY', now)) + ' GET: https://api.ipstack.com/');
